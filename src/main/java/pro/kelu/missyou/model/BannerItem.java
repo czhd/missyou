@@ -16,6 +16,6 @@ public class BannerItem {
     private Long bannerId;
 
     @ManyToOne
-    @JoinColumn(insertable = false, updatable = false, name = "bannerId")
+    @JoinColumn(foreignKey = @ForeignKey(value = ConstraintMode.NO_CONSTRAINT), insertable = false, updatable = false, name = "bannerId")
     private Banner banner;
 }
