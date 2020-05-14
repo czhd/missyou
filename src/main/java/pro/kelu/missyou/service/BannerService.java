@@ -1,5 +1,7 @@
 package pro.kelu.missyou.service;
 
+import pro.kelu.missyou.model.Banner;
+
 public interface BannerService {
-    void getByName(String name);
+    Banner getByName(String name);
 }

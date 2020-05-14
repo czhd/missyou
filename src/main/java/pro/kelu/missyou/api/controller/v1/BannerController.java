@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import pro.kelu.missyou.dto.PersonDTO;
+import pro.kelu.missyou.model.Banner;
 import pro.kelu.missyou.sample.ISkill;
 import pro.kelu.missyou.service.BannerService;
 
@@ -18,7 +19,8 @@ public class BannerController {
     private BannerService bannerService;
 
     @GetMapping("name/{name}")
-    public void getByName(@PathVariable String name) {
-
+    public Banner getByName(@PathVariable String name) {
+        Banner banner = bannerService.getByName(name);
+        return banner;
     }
 }
