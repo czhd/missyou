@@ -19,7 +19,9 @@ public class GlobalExceptionAdvice {
     }
 
     @ExceptionHandler(HttpException.class)
-    public void httpHandelException(HttpServletRequest req, HttpException e) {
+    public UnifyResponse httpHandelException(HttpServletRequest req, HttpException e) {
         System.out.println("Http异常处理");
+        UnifyResponse message = new UnifyResponse(999, "服务器错误", "url");
+        return message;
     }
 }
