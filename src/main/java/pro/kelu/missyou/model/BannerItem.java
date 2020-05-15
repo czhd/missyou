@@ -1,21 +1,22 @@
 package pro.kelu.missyou.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 
 @Entity
-public class BannerItem {
+@Getter
+@Setter
+public class BannerItem extends BaseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
+    private long bannerId;
     private String name;
     private String img;
     private Short type;
-    private String keyWord;
+    private String keyword;
+    private String description;
 
-    //物理外键
-    private Long bannerId;
 
-    @ManyToOne
-    @JoinColumn(foreignKey = @ForeignKey(value = ConstraintMode.NO_CONSTRAINT), insertable = false, updatable = false, name = "bannerId")
-    private Banner banner;
 }

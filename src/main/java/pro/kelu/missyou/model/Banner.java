@@ -1,22 +1,27 @@
 package pro.kelu.missyou.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
-@Table(name = "banner")
-public class Banner {
+@Getter
+@Setter
+public class Banner extends BaseEntity {
     @Id
-    //自增长
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String title;
-    @Column(length = 20)
+    private long id;
     private String name;
+    private String title;
     private String img;
     private String description;
 
-    //关系一对多
-    @OneToMany(mappedBy = "banner", fetch = FetchType.EAGER)
+
+    @OneToMany
+    @JoinColumn(name = "bannerId")
     private List<BannerItem> items;
 }
