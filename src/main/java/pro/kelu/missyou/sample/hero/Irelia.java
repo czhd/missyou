@@ -3,7 +3,7 @@ package pro.kelu.missyou.sample.hero;
 import org.springframework.stereotype.Component;
 import pro.kelu.missyou.sample.ISkill;
 
-//@Component
+@Component
 public class Irelia implements ISkill {
 
     public void q() {

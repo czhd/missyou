@@ -4,7 +4,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import pro.kelu.missyou.sample.ISkill;
 
-//@Component
+@Component
 public class Diana implements ISkill {
 
     public void q() {

@@ -1,6 +1,9 @@
 package pro.kelu.missyou.exception.http;
 
+import lombok.Getter;
+
+@Getter
 public class HttpException extends RuntimeException {
-    public Integer code;
-    public Integer httpStatusCode = 500;
+    protected int code;
+    protected int httpStatusCode = 500;
 }
