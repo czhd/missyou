@@ -34,6 +34,7 @@ public class GlobalExceptionAdvice{
     }
 
     @ExceptionHandler(HttpException.class)
+<<<<<<< HEAD
     public ResponseEntity<UnifyResponse> handleHttpException(HttpServletRequest req, HttpException e) {
         System.out.println(e);
         String requestUrl = req.getRequestURI();
@@ -45,5 +46,11 @@ public class GlobalExceptionAdvice{
         HttpStatus httpStatus = HttpStatus.resolve(e.getHttpStatusCode());
         ResponseEntity<UnifyResponse> r = new ResponseEntity<>(message, httpHeaders, httpStatus);
         return r;
+=======
+    public UnifyResponse httpHandelException(HttpServletRequest req, HttpException e) {
+        System.out.println("Http异常处理");
+        UnifyResponse message = new UnifyResponse(999, "服务器错误", "url");
+        return message;
+>>>>>>> dbf046ce3491c2d853be1fd57cbc437a6d030b4a
     }
 }

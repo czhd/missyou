@@ -5,4 +5,6 @@ public class NotFoundException extends HttpException {
         this.code = code;
         this.httpStatusCode = 404;
     }
+
+
 }

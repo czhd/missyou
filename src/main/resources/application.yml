@@ -4,6 +4,14 @@ spring:
   jpa:
     hibernate:
       ddl-auto: none
+<<<<<<< HEAD
 
 missyou:
   api-package: pro.kelu.missyou.api
+=======
+  jackson:
+    property-naming-strategy: SNAKE_CASE
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: true
+
+>>>>>>> dbf046ce3491c2d853be1fd57cbc437a6d030b4a
