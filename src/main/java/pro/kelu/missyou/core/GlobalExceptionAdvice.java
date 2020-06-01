@@ -5,6 +5,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -13,6 +15,9 @@ import pro.kelu.missyou.core.configuration.ExceptionCodeConfiguration;
 import pro.kelu.missyou.exception.http.HttpException;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import java.util.List;
 
 
 @ControllerAdvice
@@ -29,14 +34,11 @@ public class GlobalExceptionAdvice{
         System.out.println(e);
         String requestUrl = req.getRequestURI();
         String method = req.getMethod();
-        UnifyResponse message = new UnifyResponse(9999, "服务器异常", method + " " + requestUrl);
-        return message;
+        return new UnifyResponse(9999, "服务器异常", method + " " + requestUrl);
     }
 
     @ExceptionHandler(HttpException.class)
-<<<<<<< HEAD
     public ResponseEntity<UnifyResponse> handleHttpException(HttpServletRequest req, HttpException e) {
-        System.out.println(e);
         String requestUrl = req.getRequestURI();
         String method = req.getMethod();
 
@@ -44,13 +46,39 @@ public class GlobalExceptionAdvice{
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
         HttpStatus httpStatus = HttpStatus.resolve(e.getHttpStatusCode());
-        ResponseEntity<UnifyResponse> r = new ResponseEntity<>(message, httpHeaders, httpStatus);
-        return r;
-=======
-    public UnifyResponse httpHandelException(HttpServletRequest req, HttpException e) {
-        System.out.println("Http异常处理");
-        UnifyResponse message = new UnifyResponse(999, "服务器错误", "url");
-        return message;
->>>>>>> dbf046ce3491c2d853be1fd57cbc437a6d030b4a
+        return new ResponseEntity<>(message, httpHeaders, httpStatus);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseBody
+    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
+    public UnifyResponse handleBeanValidationException(HttpServletRequest req, MethodArgumentNotValidException e) {
+        String method = req.getMethod();
+        String requestUrl = req.getRequestURI();
+
+        List<ObjectError> errors = e.getBindingResult().getAllErrors();
+        String message = this.formatAllErrorsMessage(errors);
+        return new UnifyResponse(10001, message, method + " " + requestUrl);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    @ResponseBody
+    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
+    public UnifyResponse handleConstraintViolationException(HttpServletRequest req, ConstraintViolationException e) {
+        String method = req.getMethod();
+        String requestUrl = req.getRequestURI();
+        String message = e.getMessage();
+//        for (ConstraintViolation error: e.getConstraintViolations()) {
+//        }
+        return new UnifyResponse(10001, message, method + " " + requestUrl);
+    }
+
+
+    private String formatAllErrorsMessage(List<ObjectError> errors) {
+        StringBuffer errMsg = new StringBuffer();
+        errors.forEach(error ->
+                errMsg.append(error.getDefaultMessage()).append("；")
+        );
+        return errMsg.toString();
     }
 }
