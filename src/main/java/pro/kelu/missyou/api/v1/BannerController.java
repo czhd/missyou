@@ -2,23 +2,30 @@ package pro.kelu.missyou.api.v1;
 
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Range;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import pro.kelu.missyou.dto.PersonDTO;
 import pro.kelu.missyou.exception.http.NotFoundException;
+import pro.kelu.missyou.model.Banner;
+import pro.kelu.missyou.service.BannerService;
+
+import javax.validation.constraints.NotBlank;
 
 @RestController
 @RequestMapping("/banner")
 @Validated
 public class BannerController {
 
-    @PostMapping("name/{id}")
-    public PersonDTO getByName(@PathVariable @Range(min = 1, max = 10, message = "长度在1~10哦") Integer id,
-                            @RequestParam @Length(min = 8) String name,
-                            @RequestBody @Validated PersonDTO person) {
+    @Autowired
+    private BannerService bannerService;
 
-//        PersonDTO personDTO = new PersonDTO();
-////        personDTO.getAge();
-        return person;
+    @GetMapping("/name/{name}")
+    public Banner getByName(@PathVariable @NotBlank String name) {
+        Banner banner =  bannerService.getByName(name);
+        if (banner == null) {
+            throw new NotFoundException(30005);
+        }
+        return banner;
     }
 }
