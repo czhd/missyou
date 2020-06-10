@@ -1,5 +1,7 @@
 package pro.kelu.missyou.api.v1;
 
+import com.github.dozermapper.core.DozerBeanMapperBuilder;
+import com.github.dozermapper.core.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -8,8 +10,10 @@ import org.springframework.web.bind.annotation.RestController;
 import pro.kelu.missyou.exception.http.NotFoundException;
 import pro.kelu.missyou.model.Spu;
 import pro.kelu.missyou.service.SpuService;
+import pro.kelu.missyou.vo.SpuSimplifyVO;
 
 import javax.validation.constraints.Positive;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -28,8 +32,14 @@ public class SpuController {
     }
 
     @GetMapping("/latest")
-    public List<Spu> getLatestSpu() {
+    public List<SpuSimplifyVO> getLatestSpu() {
+        Mapper mapper = DozerBeanMapperBuilder.buildDefault();
         List<Spu> spuList = spuService.getLastPagingSpu();
-        return spuList;
+        List<SpuSimplifyVO> vos = new ArrayList<>();
+        spuList.forEach(spu -> {
+            SpuSimplifyVO vo = mapper.map(spu, SpuSimplifyVO.class);
+            vos.add(vo);
+        });
+        return vos;
     }
 }
