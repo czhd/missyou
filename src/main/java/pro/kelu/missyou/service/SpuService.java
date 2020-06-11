@@ -1,6 +1,10 @@
 package pro.kelu.missyou.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import pro.kelu.missyou.exception.http.NotFoundException;
 import pro.kelu.missyou.model.Spu;
@@ -17,7 +21,17 @@ public class SpuService {
         return spuRepository.findOneById(id);
     }
 
-    public List<Spu> getLastPagingSpu() {
-        return spuRepository.findAll();
+    public Page<Spu> getLastPagingSpu(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createTime").descending());
+        return spuRepository.findAll(pageable);
+    }
+
+    public Page<Spu> getByCategory(long cid, boolean isRoot, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        if (isRoot) {
+            return (Page<Spu>) spuRepository.findByRootCategoryIdOrderByCreateTime(cid, pageable);
+        } else {
+            return (Page<Spu>) spuRepository.findByCategoryIdOrderByCreateTime(cid, pageable);
+        }
     }
 }
